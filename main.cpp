@@ -6,6 +6,7 @@ int main(int argc, char const *argv[]) {
   int v,e;
   cin >> v >> e;
   FordFulkerson ff = FordFulkerson(v,e);
-  ff.print_matrix();
+  // ff.BFS(2);
+  // ff.print_matrix();
   return 0;
 }
