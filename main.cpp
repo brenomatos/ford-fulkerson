@@ -5,8 +5,8 @@ using namespace std;
 int main(int argc, char const *argv[]) {
   int v,e;
   cin >> v >> e;
-  FordFulkerson ff = FordFulkerson(v,e);
-  // ff.BFS(2);
-  // ff.print_matrix();
+  MaxFlow ff = MaxFlow(v,e);
+  cout << ff.BFS(2,3) << endl;
+
   return 0;
 }

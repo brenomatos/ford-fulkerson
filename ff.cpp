@@ -3,9 +3,9 @@
 using namespace std;
 
 
-FordFulkerson::FordFulkerson(int v, int e){
+MaxFlow::MaxFlow(int v, int e){
   int src,trg,w;
-
+  this->max_flow = 0;
   this->vertices = v;
   this->edges = e;
   this->adj_m = (int**) malloc(sizeof(int*) * this->vertices);
@@ -25,7 +25,7 @@ FordFulkerson::FordFulkerson(int v, int e){
 
 }
 
-FordFulkerson::~FordFulkerson(){
+MaxFlow::~MaxFlow(){
   for (int i = 0; i < this->vertices; i++) {
     free(this->adj_m[i]);
   }
@@ -34,31 +34,28 @@ FordFulkerson::~FordFulkerson(){
   free(this->visited);
 }
 
-void FordFulkerson::BFS(int start_v){
+bool MaxFlow::BFS(int s, int t){
   queue <int> q;
   int v;
-  q.push(start_v);
-  cout << start_v << endl;
-  this->visited[start_v] = -1;//-1 means the node was visited
+  q.push(s);
+  // cout << s << endl;
+  this->visited[s] = -1;//-1 means the node was visited
   while (!q.empty()) {
     v = q.front();
     q.pop();
     for (int i = 0; i < this->vertices; i++) {
       if (this->adj_m[v][i] != 0) {//if there's a edge between v and i
         if (this->visited[i]==0) {//if wasn't visited
-          cout << i << endl;;
+          // cout << i << endl;
           this->visited[i] = -1;
           q.push(i);
         }
       }
     }
   }
+  return (this->visited[t] == -1);
 }
-// void FordFulkerson::print_matrix(){
-//     for (int i = 0; i < this->vertices; i++) {
-//       for (int j = 0; j < this->vertices; j++) {
-//         cout << this->adj_m[i][j] << " ";
-//       }
-//       cout << endl;
-//     }
-// }
+
+int MaxFlow::FordFulkerson(){
+
+}
