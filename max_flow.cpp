@@ -8,9 +8,15 @@ MaxFlow::MaxFlow(int v, int e){
   this->max_flow = 0;
   this->vertices = v;
   this->edges = e;
+  //original graph
   this->adj_m = (int**) malloc(sizeof(int*) * this->vertices);
   for (int i = 0; i < this->vertices; i++) {
     this->adj_m[i] = (int*) malloc(sizeof(int) * this->vertices);
+  }
+  //residual graph
+  this->residual_graph = (int**) malloc(sizeof(int*) * this->vertices);
+  for (int i = 0; i < this->vertices; i++) {
+    this->residual_graph[i] = (int*) malloc(sizeof(int) * this->vertices);
   }
 
   this->visited = (int*) malloc(sizeof(int) * this->vertices);
@@ -30,6 +36,12 @@ MaxFlow::~MaxFlow(){
     free(this->adj_m[i]);
   }
   free(this->adj_m);
+
+  for (int i = 0; i < this->vertices; i++) {
+    free(this->residual_graph[i]);
+  }
+  free(this->residual_graph);
+
 
   free(this->visited);
 }
@@ -56,6 +68,8 @@ bool MaxFlow::BFS(int s, int t){
   return (this->visited[t] == -1);
 }
 
-int MaxFlow::FordFulkerson(){
-
+int MaxFlow::FordFulkerson(int s, int t){
+  while (this->BFS(s,t)) {
+    cout << "verdade" << endl;
+  }
 }
