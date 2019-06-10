@@ -76,7 +76,14 @@ bool MaxFlow::BFS(int s, int t){
 }
 
 int MaxFlow::FordFulkerson(int s, int t){
+  // copy original graph to residual
+  for (int i = 0; i < this->vertices; i++) {
+    for (int j = 0; j < this->vertices; j++) {
+      this->residual_graph[i][j] = this->adj_m[i][j];
+    }
+  }
   while (this->BFS(s,t)) {
     cout << "verdade" << endl;
+    break;
   }
 }
