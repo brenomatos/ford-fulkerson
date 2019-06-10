@@ -14,5 +14,7 @@ public:
   ~MaxFlow();
   bool BFS(int s, int t);//s for source and t for sink
   int FordFulkerson(int s, int t);//returns max flow for the graph
-  void print_matrix();
+  void init_matrixes();
+  void read_input();
+  void reset_visited();
 };

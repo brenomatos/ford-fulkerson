@@ -1,33 +1,15 @@
 #include <bits/stdc++.h>
-#include "ff.h"
+#include "max_flow.h"
 using namespace std;
 
 
 MaxFlow::MaxFlow(int v, int e){
-  int src,trg,w;
   this->max_flow = 0;
   this->vertices = v;
   this->edges = e;
-  //original graph
-  this->adj_m = (int**) malloc(sizeof(int*) * this->vertices);
-  for (int i = 0; i < this->vertices; i++) {
-    this->adj_m[i] = (int*) malloc(sizeof(int) * this->vertices);
-  }
-  //residual graph
-  this->residual_graph = (int**) malloc(sizeof(int*) * this->vertices);
-  for (int i = 0; i < this->vertices; i++) {
-    this->residual_graph[i] = (int*) malloc(sizeof(int) * this->vertices);
-  }
-
-  this->visited = (int*) malloc(sizeof(int) * this->vertices);
-  for (int i = 0; i < this->vertices; i++) {//start all vertices as unvisited
-    this->visited[i] = 0;
-  }
-
-  for (int i = 0; i < this->edges; i++) {
-    cin >> src >> trg >> w;
-    this->adj_m[src][trg] = w;
-  }
+  this->reset_visited();
+  this->init_matrixes();
+  this->read_input();
 
 }
 
@@ -41,9 +23,34 @@ MaxFlow::~MaxFlow(){
     free(this->residual_graph[i]);
   }
   free(this->residual_graph);
-
-
   free(this->visited);
+}
+
+void MaxFlow::init_matrixes(){
+  //original graph
+  this->adj_m = (int**) malloc(sizeof(int*) * this->vertices);
+  for (int i = 0; i < this->vertices; i++) {
+    this->adj_m[i] = (int*) malloc(sizeof(int) * this->vertices);
+  }
+  //residual graph
+  this->residual_graph = (int**) malloc(sizeof(int*) * this->vertices);
+  for (int i = 0; i < this->vertices; i++) {
+    this->residual_graph[i] = (int*) malloc(sizeof(int) * this->vertices);
+  }
+}
+
+void MaxFlow::read_input(){
+  int src,trg,w;
+  for (int i = 0; i < this->edges; i++) {
+    cin >> src >> trg >> w;
+    this->adj_m[src][trg] = w;
+  }
+}
+void MaxFlow::reset_visited(){
+  this->visited = (int*) malloc(sizeof(int) * this->vertices);
+  for (int i = 0; i < this->vertices; i++) {//start all vertices as unvisited
+    this->visited[i] = 0;
+  }
 }
 
 bool MaxFlow::BFS(int s, int t){
