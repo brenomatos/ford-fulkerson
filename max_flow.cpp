@@ -21,9 +21,9 @@ MaxFlow::~MaxFlow(){
   free(this->adj_m);
 
   for (int i = 0; i < this->vertices; i++) {
-    free(this->residual_graph[i]);
+    free(this->aux_graph[i]);
   }
-  free(this->residual_graph);
+  free(this->aux_graph);
   free(this->visited);
   free(this->parent);
 }
@@ -35,9 +35,9 @@ void MaxFlow::init_matrixes(){
     this->adj_m[i] = (int*) malloc(sizeof(int) * this->vertices);
   }
   //residual graph
-  this->residual_graph = (int**) malloc(sizeof(int*) * this->vertices);
+  this->aux_graph = (int**) malloc(sizeof(int*) * this->vertices);
   for (int i = 0; i < this->vertices; i++) {
-    this->residual_graph[i] = (int*) malloc(sizeof(int) * this->vertices);
+    this->aux_graph[i] = (int*) malloc(sizeof(int) * this->vertices);
   }
 }
 
@@ -85,6 +85,10 @@ void MaxFlow::read_input(){
   for (int i = 0; i < this->edges; i++) {
     cin >> src >> trg >> w;
     this->adj_m[src][trg] = w;
+    this->adj_m[trg][src] = w;
+
+    this->aux_graph[src][trg] = w;
+    this->aux_graph[trg][src] = w;
   }
 }
 void MaxFlow::set_visited(){
@@ -120,15 +124,17 @@ bool MaxFlow::BFS(int s, int t){
 
 int MaxFlow::FordFulkerson(int s, int t){
   // copy original graph to residual
-  // for (int i = 0; i < this->vertices; i++) {
-  //   for (int j = 0; j < this->vertices; j++) {
-  //     this->residual_graph[i][j] = this->adj_m[i][j];
-  //   }
-  // }
+  this->max_flow = 0;
+  for (int i = 0; i < this->vertices; i++) {
+    for (int j = 0; j < this->vertices; j++) {
+      this->adj_m[i][j] = this->aux_graph[i][j];
+    }
+  }
+
   while (this->BFS(s,t)) {
     // s temos caminho de s para t, atualizar os pesos
     augment_path(s, t);
-    cout << this->max_flow;
   }
+  cout << this->max_flow << endl;
 
 }
