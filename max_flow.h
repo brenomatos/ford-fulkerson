@@ -9,6 +9,7 @@ private:
   int** adj_m;//adjecency matrix
   int** residual_graph;
   int* visited;//keeps track of visited vertices
+  int* parent;
 public:
   MaxFlow(int v, int e);
   ~MaxFlow();
@@ -16,5 +17,8 @@ public:
   int FordFulkerson(int s, int t);//returns max flow for the graph
   void init_matrixes();
   void read_input();
+  void set_visited();
   void reset_visited();
+  void reset_parent();
+  void augment_path(int s, int t);
 };
