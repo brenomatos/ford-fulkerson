@@ -7,11 +7,12 @@ MaxFlow::MaxFlow(int v, int e){
   this->max_flow = 0;
   this->vertices = v;
   this->edges = e;
+  this->vertex_cut = 0;
   this->set_visited();
   this->init_matrixes();
   this->read_input();
   this->parent = (int*) malloc(sizeof(int) * this->vertices);
-
+  this->cut = (int *) malloc(sizeof	(int) * this->vertices);
 }
 
 MaxFlow::~MaxFlow(){
@@ -31,6 +32,7 @@ MaxFlow::~MaxFlow(){
   free(this->aux_graph);
   free(this->visited);
   free(this->parent);
+  free(this->cut);
 }
 
 void MaxFlow::init_matrixes(){
@@ -49,6 +51,15 @@ void MaxFlow::init_matrixes(){
   for (int i = 0; i < this->vertices; i++) {
     this->aux_graph[i] = (int*) malloc(sizeof(int) * this->vertices);
   }
+  // for (int i = 0; i < this->vertices; ++i)
+  // {
+  // 	for (int j = 0; j < this->vertices; ++j)
+  // 	{
+  // 		this->adj_m[i][j] = 0;
+  // 		this->adj_m2[i][j] = 0;
+  // 		this->aux_graph[i][j] = 0;
+  // 	}
+  // }
 }
 
 void MaxFlow::reset_visited(){
@@ -92,11 +103,11 @@ void MaxFlow::augment_path(int s,int t){
     this->adj_m[aux_src][aux_trg] -= min_flow;
     this->adj_m[aux_trg][aux_src] += min_flow;  
   }
-  cout << "S e T " << s << " " << t << endl;
-  for (int i = 0; i < path.size(); ++i)
-  {
-  	cout << path[i].first << " " << path[i].second << endl;
-  }
+  // cout << "S e T " << s << " " << t << endl;
+  // for (int i = 0; i < path.size(); ++i)
+  // {
+  // 	cout << path[i].first << " " << path[i].second << endl;
+  // }
   this->max_flow += min_flow;
 }
 
@@ -142,6 +153,37 @@ bool MaxFlow::BFS(int s, int t){
   return (this->visited[t] == -1);
 }
 
+int MaxFlow::get_flow(){
+	return this->max_flow;
+}
+
+void MaxFlow::get_cut(){
+	this->vertex_cut = 0;
+	for (int i = 0; i < this->vertices; ++i)
+	{
+		if (this->visited[i] == -1)
+		{
+			this->cut[i] = 1;
+			this->vertex_cut +=1;
+		}
+	}
+}
+void MaxFlow::print_output(){
+	cout << this->vertex_cut << endl;
+	for (int i = 0; i < this->vertices; ++i)
+	{
+		if (this->cut[i]==1)
+		{
+			cout << i << " ";
+		}
+	}
+	cout << endl;
+	cout << this->max_flow << endl;
+
+}
+void MaxFlow::set_flow(int f){
+	this->max_flow = f;
+}
 int MaxFlow::FordFulkerson(int s, int t){
   // copy original graph to residual
   this->max_flow = 0;
@@ -155,6 +197,4 @@ int MaxFlow::FordFulkerson(int s, int t){
     // s temos caminho de s para t, atualizar os pesos
     augment_path(s, t);
   }
-  cout << "FLUXO" << this->max_flow << endl;
-
 }

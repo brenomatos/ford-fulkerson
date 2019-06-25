@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define MAX 1000000000
+#define MAX INT_MAX
 using namespace std;
 
 
@@ -11,6 +11,8 @@ private:
   int** aux_graph;
   int* visited;//keeps track of visited vertices
   int* parent;
+  int* cut; 
+  int vertex_cut;
 public:
   MaxFlow(int v, int e);
   ~MaxFlow();
@@ -19,8 +21,12 @@ public:
   void init_matrixes();
   void read_input();
   void reset_matrix();
+  int get_flow();
+  void get_cut();
   void set_visited();
   void reset_visited();
   void reset_parent();
+  void set_flow(int f);
   void augment_path(int s, int t);
+  void print_output();
 };
