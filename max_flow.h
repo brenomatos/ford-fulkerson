@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-
+#define MAX 1000000000
 using namespace std;
 
 
@@ -7,6 +7,7 @@ class MaxFlow {
 private:
   int vertices, edges, max_flow;
   int** adj_m;//adjecency matrix
+  int** adj_m2;
   int** aux_graph;
   int* visited;//keeps track of visited vertices
   int* parent;

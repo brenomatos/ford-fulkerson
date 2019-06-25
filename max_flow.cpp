@@ -21,6 +21,11 @@ MaxFlow::~MaxFlow(){
   free(this->adj_m);
 
   for (int i = 0; i < this->vertices; i++) {
+    free(this->adj_m2[i]);
+  }
+  free(this->adj_m2);
+
+  for (int i = 0; i < this->vertices; i++) {
     free(this->aux_graph[i]);
   }
   free(this->aux_graph);
@@ -33,6 +38,11 @@ void MaxFlow::init_matrixes(){
   this->adj_m = (int**) malloc(sizeof(int*) * this->vertices);
   for (int i = 0; i < this->vertices; i++) {
     this->adj_m[i] = (int*) malloc(sizeof(int) * this->vertices);
+  }
+  //residual graph
+  this->adj_m2 = (int**) malloc(sizeof(int*) * this->vertices);
+  for (int i = 0; i < this->vertices; i++) {
+    this->adj_m2[i] = (int*) malloc(sizeof(int) * this->vertices);
   }
   //residual graph
   this->aux_graph = (int**) malloc(sizeof(int*) * this->vertices);
@@ -60,14 +70,19 @@ void MaxFlow::augment_path(int s,int t){
   std::vector<pair<int,int>> path;
   aux_trg = t;
   aux_src = this->parent[t];
-  min_flow = this->adj_m[aux_src][aux_trg];
+  min_flow = MAX;
   while(aux_trg!=aux_src){
-    if (min_flow < this->adj_m[aux_src][aux_trg]){
-      min_flow = this->adj_m[aux_src][aux_trg];
-    }
     path.push_back(make_pair(aux_src,aux_trg));
     aux_trg = aux_src;
     aux_src = this->parent[aux_trg];
+  }
+  for (int i = 0; i < path.size(); ++i)
+  {
+  	aux_src = path[i].first;
+    aux_trg = path[i].second;
+  	if (this->adj_m[aux_src][aux_trg] < min_flow){
+      min_flow = this->adj_m[aux_src][aux_trg];
+    }
   }
   for (int i = 0; i < path.size(); ++i)
   {
@@ -76,6 +91,11 @@ void MaxFlow::augment_path(int s,int t){
     aux_trg = path[i].second;
     this->adj_m[aux_src][aux_trg] -= min_flow;
     this->adj_m[aux_trg][aux_src] += min_flow;  
+  }
+  cout << "S e T " << s << " " << t << endl;
+  for (int i = 0; i < path.size(); ++i)
+  {
+  	cout << path[i].first << " " << path[i].second << endl;
   }
   this->max_flow += min_flow;
 }
@@ -110,7 +130,7 @@ bool MaxFlow::BFS(int s, int t){
     v = q.front();
     q.pop();
     for (int i = 0; i < this->vertices; i++) {
-      if (this->adj_m[v][i] != 0) {//if there's a edge between v and i
+      if (this->adj_m[v][i] > 0) {//if there's a edge between v and i
         if (this->visited[i]==0) {//if wasn't visited
           this->visited[i] = -1;
           this->parent[i] = v;
@@ -135,6 +155,6 @@ int MaxFlow::FordFulkerson(int s, int t){
     // s temos caminho de s para t, atualizar os pesos
     augment_path(s, t);
   }
-  cout << this->max_flow << endl;
+  cout << "FLUXO" << this->max_flow << endl;
 
 }
