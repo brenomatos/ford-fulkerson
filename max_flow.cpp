@@ -13,6 +13,10 @@ MaxFlow::MaxFlow(int v, int e){
   this->read_input();
   this->parent = (int*) malloc(sizeof(int) * this->vertices);
   this->cut = (int *) malloc(sizeof	(int) * this->vertices);
+  for (int i = 0; i < this->vertices; ++i)
+  {
+  	this->cut[i] = 0;
+  }
 }
 
 MaxFlow::~MaxFlow(){
@@ -159,6 +163,10 @@ int MaxFlow::get_flow(){
 
 void MaxFlow::get_cut(){
 	this->vertex_cut = 0;
+	for (int i = 0; i < this->vertices; ++i)
+	{
+		this->cut[i] = 0;
+	}
 	for (int i = 0; i < this->vertices; ++i)
 	{
 		if (this->visited[i] == -1)

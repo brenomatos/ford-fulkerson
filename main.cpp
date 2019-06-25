@@ -10,7 +10,7 @@ int main(int argc, char const *argv[]) {
   for (int i = v; i > 0; --i)
   {
   	ff.FordFulkerson(0,i);
-  	if (ff.get_flow() < flux && ff.get_flow()!=0)
+  	if (ff.get_flow() <= flux && ff.get_flow()!=0)
   	{
   		flux = ff.get_flow();
   		ff.get_cut();
